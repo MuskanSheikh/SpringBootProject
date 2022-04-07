@@ -25,15 +25,15 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course getCourse(long courseId) {
-        Course c = null;
+    public List<Course> getCourse(long courseId) {
+        return list.stream().filter(g->g.getId()==courseId).collect(Collectors.toList());
+        /*Course c = null;
         for (Course course : list) {
             if (course.getId() == courseId) {
                 c = course;
                 break;
             }
-        }
-        return c;
+        }return c;*/
     }
 
     @Override

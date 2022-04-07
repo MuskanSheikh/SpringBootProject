@@ -11,9 +11,10 @@ import java.util.List;
 public class MyController {
     @Autowired
     private CourseService courseService;
-    @GetMapping("/courses")
+
 
    //get all courses
+   @GetMapping("/courses")
     public List<Course> getCourses()
     {
         return this.courseService.getCourses();
@@ -21,7 +22,7 @@ public class MyController {
 
     //get single course
     @GetMapping("/courses/{courseId}")
-    public Course getCourse(@PathVariable String courseId)
+    public List<Course> getCourse(@PathVariable String courseId)
     {
         return this.courseService.getCourse(Long.parseLong(courseId));
     }
