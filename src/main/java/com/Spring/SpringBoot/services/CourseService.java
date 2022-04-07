@@ -12,5 +12,5 @@ public interface CourseService {
 
     public void updateCourse(Course course, long courseId);
 
-    public void deleteCourse(int courseId);
+    public void deleteCourse(long courseId);
 }

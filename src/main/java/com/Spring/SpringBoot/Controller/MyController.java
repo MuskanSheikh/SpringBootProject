@@ -3,6 +3,8 @@ package com.Spring.SpringBoot.Controller;
 import com.Spring.SpringBoot.entity.Course;
 import com.Spring.SpringBoot.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,9 +38,15 @@ public class MyController {
 
     //delete course
     @DeleteMapping("/courses/{courseId}")
-    public void deleteCourse(@PathVariable int courseId)
+    public ResponseEntity<HttpStatus> deleteCourse(@PathVariable String courseId)
     {
-        this.courseService.deleteCourse(courseId);
+        try {
+            this.courseService.deleteCourse(Long.parseLong(courseId));
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e)
+        {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     //update course

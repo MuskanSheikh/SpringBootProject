@@ -56,7 +56,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void deleteCourse(int courseId) {
+    public void deleteCourse(long courseId) {
         list=list.stream().filter(d->d.getId()!=courseId).collect(Collectors.toList());
     }
 }
