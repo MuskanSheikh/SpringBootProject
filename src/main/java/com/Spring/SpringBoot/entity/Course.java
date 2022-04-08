@@ -1,6 +1,14 @@
 package com.Spring.SpringBoot.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+//@GeneratedValue(strategy = GenerationType.IDENTITY)
 public class Course {
+    @Id
     private long id;
     private String title;
     private String description;

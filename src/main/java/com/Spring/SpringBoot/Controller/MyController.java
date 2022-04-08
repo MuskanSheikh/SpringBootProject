@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 public class MyController {
+
     @Autowired
     private CourseService courseService;
 
@@ -19,14 +20,15 @@ public class MyController {
    @GetMapping("/courses")
     public List<Course> getCourses()
     {
+
         return this.courseService.getCourses();
     }
 
     //get single course
     @GetMapping("/courses/{courseId}")
-    public List<Course> getCourse(@PathVariable String courseId)
+    public Course getCourse(@PathVariable Long courseId)
     {
-        return this.courseService.getCourse(Long.parseLong(courseId));
+        return this.courseService.getCourse(courseId);
     }
 
     //add course
@@ -36,7 +38,7 @@ public class MyController {
         return this.courseService.addCourse(course);
     }
 
-    //delete course
+    //delete course handler
     @DeleteMapping("/courses/{courseId}")
     public ResponseEntity<HttpStatus> deleteCourse(@PathVariable String courseId)
     {
