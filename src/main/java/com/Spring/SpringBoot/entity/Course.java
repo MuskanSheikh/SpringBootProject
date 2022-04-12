@@ -1,8 +1,6 @@
 package com.Spring.SpringBoot.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
@@ -13,7 +11,7 @@ public class Course {
     private String title;
     private String description;
 
-    public Course(long id, String title, String description) {
+    public Course(long id, String title, String description, byte[] file) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -46,7 +44,6 @@ public class Course {
     public void setDescription(String description) {
         this.description = description;
     }
-
     @Override
     public String toString() {
         return "Course{" +

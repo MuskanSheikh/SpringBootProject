@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-
-@Component
 public class FileUploadHelper {
     //public final String Upload_Dir="C:\\Users\\Muskan\\Downloads\\SpringBoot\\src\\main\\resources\\static\\images";
     public final String Upload_Dir=new ClassPathResource("static/images/").getFile().getAbsolutePath();
@@ -34,7 +32,8 @@ public class FileUploadHelper {
             //fos.close();
 
 
-            Files.copy(multipart.getInputStream(), Paths.get(Upload_Dir+ File.separator+multipart.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(multipart.getInputStream(), Paths.get(Upload_Dir+
+                    File.separator+multipart.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
             f=true;
         }catch (Exception e)
         {

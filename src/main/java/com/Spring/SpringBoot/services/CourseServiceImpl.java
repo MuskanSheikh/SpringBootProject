@@ -1,11 +1,14 @@
 package com.Spring.SpringBoot.services;
 
+import antlr.StringUtils;
 import com.Spring.SpringBoot.Dao.courseDao;
 import com.Spring.SpringBoot.entity.Course;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Access;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +19,6 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private courseDao coursedao;
 //    List<Course> list;
-
     public CourseServiceImpl() {
         /*list = new ArrayList<>();
         list.add(new Course(123, "java core course", "this course is related to java"));
@@ -42,7 +44,7 @@ public class CourseServiceImpl implements CourseService {
                 c = course;
                 break;
             }
-        }*/return coursedao.getOne(courseId);
+        }*/return coursedao.findById(courseId).get();
     }
 
     @Override
@@ -73,4 +75,5 @@ public class CourseServiceImpl implements CourseService {
         Course entity=coursedao.getOne(courseId);
         coursedao.delete(entity);
     }
+
 }
