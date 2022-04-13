@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ import java.io.IOException;
 @RestController
 public class FileDownloadController {
 
-    private static final Logger logger = LoggerFactory.getLogger(FileDownloadController.class);
+    //private static final Logger logger = LoggerFactory.getLogger(FileDownloadController.class);
 
     @Autowired
     private FileStorageService fileStorageService;
@@ -33,7 +34,9 @@ public class FileDownloadController {
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
-            logger.info("Could not determine file type.");
+           // logger.info("Could not determine file type.");
+            ResponseEntity.status(HttpStatus.OK)
+                    .body("Could not determine file type");
         }
 
         // Fallback to the default content type if type could not be determined
