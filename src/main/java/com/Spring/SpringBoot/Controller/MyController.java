@@ -3,6 +3,8 @@ package com.Spring.SpringBoot.Controller;
 import com.Spring.SpringBoot.entity.Course;
 import com.Spring.SpringBoot.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +20,10 @@ public class MyController {
 
    //get all courses
    @GetMapping("/courses")
-    public List<Course> getCourses()
+    public Page<Course> getCourses(Pageable page)
     {
 
-        return this.courseService.getCourses();
+        return courseService.getCourses(page);
     }
 
     //get single course

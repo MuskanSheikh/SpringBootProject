@@ -4,10 +4,13 @@ import antlr.StringUtils;
 import com.Spring.SpringBoot.Dao.courseDao;
 import com.Spring.SpringBoot.entity.Course;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.Access;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +31,9 @@ public class CourseServiceImpl implements CourseService {
 
     //get all course
     @Override
-    public List<Course> getCourses()
+    public Page<Course> getCourses(Pageable page)
     {
-        return coursedao.findAll();
+        return coursedao.findAll(page);
     }
 
 

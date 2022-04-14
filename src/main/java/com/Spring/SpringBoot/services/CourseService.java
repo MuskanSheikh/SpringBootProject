@@ -1,10 +1,12 @@
 package com.Spring.SpringBoot.services;
 import com.Spring.SpringBoot.entity.Course;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface CourseService {
-    public List<Course> getCourses();
+    public Page<Course> getCourses(Pageable page);
 
     public Course getCourse(long courseId);
 
