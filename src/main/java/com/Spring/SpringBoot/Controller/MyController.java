@@ -1,18 +1,27 @@
 package com.Spring.SpringBoot.Controller;
 
+import com.Spring.SpringBoot.Dao.courseDao;
 import com.Spring.SpringBoot.entity.Course;
 import com.Spring.SpringBoot.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class MyController {
+
+    @Autowired
+    courseDao coursedao;
 
     @Autowired
     private CourseService courseService;
@@ -20,11 +29,33 @@ public class MyController {
 
    //get all courses
    @GetMapping("/courses")
-    public Page<Course> getCourses(Pageable page)
-    {
+    public ResponseEntity<Map<String, Object>> getCourses(
+            @RequestParam(required = false) String title,
+            @RequestParam() int page,
+            @RequestParam() int size
+   ){
+        try{
+            List<Course> course=new ArrayList<Course>();
+            Pageable paging= PageRequest.of(page, size);
 
-        return courseService.getCourses(page);
+            Page<Course> pageC;
+            if(title==null)
+                pageC=coursedao.findAll(paging);
+            else
+                pageC=coursedao.findByTitle(title,paging);
+            course=pageC.getContent();
+           // Map<String, Object> response=new HashMap<>();
+            //response.put("course",course);
+            //response.put("current page", pageC.getNumber());
+            //response.put("total course", pageC.getTotalElements());
+            //response.put("total pages", pageC.getTotalPages());
+            return new ResponseEntity<>(null,HttpStatus.OK);
+        }catch(Exception e)
+        {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
 
     //get single course
     @GetMapping("/courses/{courseId}")
