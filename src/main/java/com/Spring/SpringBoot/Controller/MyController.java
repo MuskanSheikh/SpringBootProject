@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,41 +20,68 @@ import java.util.Map;
 public class MyController {
 
     @Autowired
-    courseDao coursedao;
-
-    @Autowired
     private CourseService courseService;
-
-
-   //get all courses
+    @Autowired
+    private courseDao courseD;
+    //get all courses
    @GetMapping("/courses")
-    public ResponseEntity<Map<String, Object>> getCourses(
+   public List<Course> getCourses()
+   {
+
+       return this.courseService.getCourses();
+   }
+    @GetMapping("/coursesTitle")
+    public ResponseEntity<Map<String, Object>> getAllByTitle(
             @RequestParam(required = false) String title,
-            @RequestParam() int page,
-            @RequestParam() int size
-   ){
-        try{
-            List<Course> course=new ArrayList<Course>();
-            Pageable paging= PageRequest.of(page, size);
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size
+    ) {
+        try {
+            List<Course> course = new ArrayList<Course>();
+            Pageable paging = PageRequest.of(page, size);
 
             Page<Course> pageC;
-            if(title==null)
-                pageC=coursedao.findAll(paging);
+            if (title == null)
+                pageC = courseD.findAll(paging);
             else
-                pageC=coursedao.findByTitle(title,paging);
-            course=pageC.getContent();
-           // Map<String, Object> response=new HashMap<>();
-            //response.put("course",course);
-            //response.put("current page", pageC.getNumber());
-            //response.put("total course", pageC.getTotalElements());
-            //response.put("total pages", pageC.getTotalPages());
-            return new ResponseEntity<>(null,HttpStatus.OK);
-        }catch(Exception e)
-        {
+                pageC = courseD.findByTitleContaining(title, paging);
+            course = pageC.getContent();
+            Map<String, Object> response = new HashMap<>();
+            response.put("course", course);
+            response.put("currentPage", pageC.getNumber());
+            response.put("totalItems", pageC.getTotalElements());
+            response.put("totalPages", pageC.getTotalPages());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    @GetMapping("/coursesDescription")
+    public ResponseEntity<Map<String, Object>> getAllByDescription(
+            @RequestParam(required = false) String description,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size) {
+        try {
+            List<Course> course = new ArrayList<Course>();
+            Pageable paging = PageRequest.of(page, size);
+
+            Page<Course> pageD;
+            if (description == null)
+                pageD = courseD.findAll(paging);
+            else
+                pageD = courseD.findByDescriptionContaining(description, paging);
+            course = pageD.getContent();
+            Map<String, Object> response = new HashMap<>();
+            response.put("course", course);
+            response.put("currentPage", pageD.getNumber());
+            response.put("totalItems", pageD.getTotalElements());
+            response.put("totalPages", pageD.getTotalPages());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     //get single course
     @GetMapping("/courses/{courseId}")
@@ -66,9 +92,10 @@ public class MyController {
 
     //add course
     @PostMapping("/courses")
-    public Course addCourse(@RequestBody Course course)
+    public ResponseEntity<Course> addCourse(@RequestBody Course course)
     {
-        return this.courseService.addCourse(course);
+        return new ResponseEntity<>(courseService.addCourse(course),
+                HttpStatus.OK);
     }
 
     //delete course handler

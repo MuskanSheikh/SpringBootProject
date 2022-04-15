@@ -1,20 +1,21 @@
 package com.Spring.SpringBoot.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
+
+import javax.persistence.*;
 
 @Entity
+@Table(name="course")
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @Column(name = "title")
     private String title;
+    @Column(name = "description")
     private String description;
 
-    public Course(long id, String title, String description, byte[] file) {
-        this.id = id;
+    public Course( String title, String description) {
         this.title = title;
         this.description = description;
     }
@@ -27,9 +28,6 @@ public class Course {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
