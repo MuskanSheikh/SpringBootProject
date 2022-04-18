@@ -30,9 +30,10 @@ public class MyController {
 
        return this.courseService.getCourses();
    }
-    @GetMapping("/coursesTitle")
-    public ResponseEntity<Map<String, Object>> getAllByTitle(
+    @GetMapping("/coursesTD")
+    public ResponseEntity<Map<String, Object>> getAllByTitleAndDescription(
             @RequestParam(required = false) String title,
+            @RequestParam(required = false) String description,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int size
     ) {
@@ -41,42 +42,16 @@ public class MyController {
             Pageable paging = PageRequest.of(page, size);
 
             Page<Course> pageC;
-            if (title == null)
+            if (title == null && description==null)
                 pageC = courseD.findAll(paging);
             else
-                pageC = courseD.findByTitleContaining(title, paging);
+                pageC = courseD.findByTitleOrDescriptionContaining(title,description, paging);
             course = pageC.getContent();
             Map<String, Object> response = new HashMap<>();
             response.put("course", course);
             response.put("currentPage", pageC.getNumber());
             response.put("totalItems", pageC.getTotalElements());
             response.put("totalPages", pageC.getTotalPages());
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/coursesDescription")
-    public ResponseEntity<Map<String, Object>> getAllByDescription(
-            @RequestParam(required = false) String description,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size) {
-        try {
-            List<Course> course = new ArrayList<Course>();
-            Pageable paging = PageRequest.of(page, size);
-
-            Page<Course> pageD;
-            if (description == null)
-                pageD = courseD.findAll(paging);
-            else
-                pageD = courseD.findByDescriptionContaining(description, paging);
-            course = pageD.getContent();
-            Map<String, Object> response = new HashMap<>();
-            response.put("course", course);
-            response.put("currentPage", pageD.getNumber());
-            response.put("totalItems", pageD.getTotalElements());
-            response.put("totalPages", pageD.getTotalPages());
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

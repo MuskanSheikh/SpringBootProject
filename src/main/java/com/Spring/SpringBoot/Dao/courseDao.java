@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface courseDao extends JpaRepository<Course, Long> {
-    Page<Course> findByTitleContaining( String title, Pageable pageable);
-    Page<Course> findByDescriptionContaining( String description, Pageable pageable);
+    Page<Course> findByTitleOrDescriptionContaining( String title,String description, Pageable pageable);
+    //Page<Course> findByDescriptionContaining( String description, Pageable pageable);
 }
