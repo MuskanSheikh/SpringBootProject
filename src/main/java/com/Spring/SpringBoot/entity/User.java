@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 @Table(name="user")
 @Entity
@@ -30,17 +31,18 @@ public class User {
     //email should be a valid email format
     //email should not null or empty
     @NotBlank
-    @Email
+    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
+            flags = Pattern.Flag.CASE_INSENSITIVE)
     private String email;
 
     //password should not be null or empty
     //password should have atleast 8 character
     @NotEmpty
-    //@Size(min=8, message = "Minimum eight characters")
-    /*@Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[\\W_])",
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,128}$",
             message = "at least one uppercase letter, " +'\'' +
-            "one lowercase letter," +'\'' +
-            " one number and one special character:")*/
+                    "one lowercase letter," +'\'' +
+                    " one number and one special character:")
+    /*@Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[\\W_])")*/
     private String password;
 
 
