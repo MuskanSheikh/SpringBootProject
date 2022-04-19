@@ -2,28 +2,25 @@ package com.Spring.SpringBoot.services;
 
 import com.Spring.SpringBoot.Dao.UserDao;
 import com.Spring.SpringBoot.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private UserDao userDao;
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    UserDao userDao;
 
+    PasswordEncoder passwordEncoder;
 
-    public List<User> getUsers() {
-        return userDao.findAll();
+    public UserService(UserDao userDao) {
+        this.userDao=userDao;
+        this.passwordEncoder=new BCryptPasswordEncoder();
     }
 
-    public User createUser(User user)
+    public User signUp(User user)
     {
-        String encodedPassword=this.bCryptPasswordEncoder.encode(user.getPassword());
+        String encodedPassword=this.passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         return userDao.save(user);
     }
