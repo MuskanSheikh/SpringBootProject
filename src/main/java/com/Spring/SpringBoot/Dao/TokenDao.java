@@ -1,8 +1,8 @@
 package com.Spring.SpringBoot.Dao;
 
 import com.Spring.SpringBoot.entity.ConfirmationToken;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface TokenDao extends JpaRepository<ConfirmationToken, String> {
+public interface TokenDao extends CrudRepository<ConfirmationToken, String> {
     ConfirmationToken findByConfirmationToken(String confirmationToken);
 }

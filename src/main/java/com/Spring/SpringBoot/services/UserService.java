@@ -4,9 +4,8 @@ import com.Spring.SpringBoot.Dao.UserDao;
 import com.Spring.SpringBoot.entity.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
-@Service
+
 public class UserService {
 
     UserDao userDao;

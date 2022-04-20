@@ -9,8 +9,6 @@ import javax.validation.constraints.Pattern;
 @Table(name="user")
 @Entity
 public class User {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

@@ -3,7 +3,8 @@ package com.Spring.SpringBoot.entity;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
-
+@Table(name="confirmationtoken")
+@Entity
 public class ConfirmationToken {
 
     @Id
@@ -20,6 +21,15 @@ public class ConfirmationToken {
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false,name="user")
     private User user;
+
+    public ConfirmationToken() {
+    }
+
+    public ConfirmationToken(User user) {
+        this.user = user;
+        createdDate=new Date();
+        confirmationToken= UUID.randomUUID().toString();
+    }
 
     public String getConfirmationToken() {
         return confirmationToken;
@@ -45,9 +55,4 @@ public class ConfirmationToken {
         this.user = user;
     }
 
-    public ConfirmationToken(User user) {
-        this.user = user;
-        createdDate=new Date();
-        confirmationToken= UUID.randomUUID().toString();
-    }
 }
