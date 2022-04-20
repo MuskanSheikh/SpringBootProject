@@ -16,7 +16,7 @@ public class User {
 
     //user name should not be null or empty
     //user name must be unique
-    @Column(name="username", nullable = false, unique = true)
+    @Column(name="username", nullable = false)
     @NotEmpty
     private String username;
 

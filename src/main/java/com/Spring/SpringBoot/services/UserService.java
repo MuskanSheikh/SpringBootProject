@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    String message="user name is already exist";
     UserDao userDao;
-
     PasswordEncoder passwordEncoder;
 
     public UserService(UserDao userDao) {
