@@ -10,8 +10,9 @@ import javax.validation.constraints.Pattern;
 @Entity
 public class User {
 
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     //user name should not be null or empty
@@ -44,6 +45,7 @@ public class User {
                     " one number and one special character:")
     /*@Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[\\W_])")*/
     private String password;
+    private boolean isEnabled;
 
 
 
@@ -56,6 +58,7 @@ public class User {
         this.lastname = lastname;
         this.email = email;
         this.password = password;
+        this.isEnabled=isEnabled();
     }
 
     public String getUsername() {
@@ -107,6 +110,14 @@ public class User {
         this.id = id;
     }
 
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -116,6 +127,7 @@ public class User {
                 ", lastname='" + lastname + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", password='" + isEnabled + '\'' +
                 '}';
     }
 }

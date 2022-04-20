@@ -1,18 +1,17 @@
 package com.Spring.SpringBoot.Controller;
 
+import com.Spring.SpringBoot.Dao.TokenDao;
+import com.Spring.SpringBoot.Dao.UserDao;
+import com.Spring.SpringBoot.entity.ConfirmationToken;
 import com.Spring.SpringBoot.entity.User;
+import com.Spring.SpringBoot.services.EmailSenderService;
 import com.Spring.SpringBoot.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/")
@@ -21,22 +20,59 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    private TokenDao tokenDao;
+    private EmailSenderService emailSenderService;
+    private UserDao userDao;
 
-    @PostMapping("/users")
-    public ResponseEntity<Map<String,Object>> insert(@Valid @RequestBody User user)throws RuntimeException
+    @GetMapping(value = "/users")
+    public ModelAndView displayResgistration(ModelAndView modelAndView,User user)
     {
-        Map<String,Object> response=new HashMap<String,Object>();
+        modelAndView.addObject("user",user);
+        modelAndView.setViewName("register");
+        return modelAndView;
+    }
+    @PostMapping("/users")
+    public ModelAndView registerUser(@Valid ModelAndView modelAndView, User user) {
+        User existeringUser=userDao.findByEmailIgnoreCase(user.getEmail());
+        if(existeringUser!=null)
+        {
+            modelAndView.addObject("message", "This email already exists!!");
+            modelAndView.setViewName("error");
+        }
+        else
+        {
+            userDao.save(user);
+            ConfirmationToken confirmationToken=new ConfirmationToken(user);
+            tokenDao.save(confirmationToken);
 
-         try{
-             User saveUser = userService.signUp(user);
-             response.put("status","Successfully SignUp");
-             return new ResponseEntity<>(response, HttpStatus.OK);
-         }catch (Exception e)
-         {
-             response.put("status","User is already exists with same username");
-         }
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-            //return new ResponseEntity<User>(saveUser, HttpStatus.CREATED);
+            SimpleMailMessage mailMessage=new SimpleMailMessage();
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setFrom("muskansheikh.100.ms@gmai.com");
+            mailMessage.setText("To confirm your accout, please click here:"
+            +"http://localhost:8080/confirm-accout?token="+confirmationToken.getConfirmationToken());
+            emailSenderService.sendEmail(mailMessage);
+            modelAndView.addObject("email",user.getEmail());
+            modelAndView.setViewName("successfulRegisteration");
+        }
+        return modelAndView;
     }
 
+    @PostMapping(value = "/confirm-account")
+    public ModelAndView confirmUserAccount(ModelAndView modelAndView, @RequestParam("token")String token)
+    {
+        ConfirmationToken confirmationToken=tokenDao.findByConfirmationToken(token);
+        if(token!=null)
+        {
+            User user=userDao.findByEmailIgnoreCase(confirmationToken.getUser().getEmail());
+            user.setEnabled(true);
+            userDao.save(user);
+            modelAndView.setViewName("accountVerified");
+        }
+        else
+        {
+            modelAndView.addObject("message","The link is invalid or broken!!!");
+            modelAndView.setViewName("error");
+        }
+        return modelAndView;
+    }
 }
