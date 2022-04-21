@@ -6,8 +6,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
-@Table(name="user")
 @Entity
+@Table(name="users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -50,14 +50,15 @@ public class User {
     public User() {
     }
 
-    public User(String username, String firstname, String lastname, String email, String password) {
+    public User(String username, String firstname, String lastname, String email, String password,boolean isEnabled) {
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
-        this.isEnabled=isEnabled();
+        this.isEnabled=isEnabled;
     }
+
 
     public String getUsername() {
         return username;
@@ -112,8 +113,8 @@ public class User {
         return isEnabled;
     }
 
-    public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
+    public void setEnabled(boolean isEnabled) {
+        isEnabled = isEnabled;
     }
 
     @Override

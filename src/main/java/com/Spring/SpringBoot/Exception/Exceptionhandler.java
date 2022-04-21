@@ -52,7 +52,7 @@ public class Exceptionhandler extends ResponseEntityExceptionHandler {
 
 
         Map<String,String> response = new HashMap<>();
-        response.put("status","Your input is invalid");
+        response.put("status","Authentication fail");
 
         return response;
     }
