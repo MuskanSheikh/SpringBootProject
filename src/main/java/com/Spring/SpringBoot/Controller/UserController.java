@@ -59,13 +59,13 @@ public class UserController {
             mailMessage.setTo(user.getEmail());
             mailMessage.setSubject("Complete Registration!");
             mailMessage.setText("To confirm your account, please click here : "
-                    +"http://localhost:8082/confirm-account?token="+confirmationToken.getConfirmationToken());
+                    +"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
 
             emailSenderService.sendEmail(mailMessage);
 
             modelAndView.addObject("email", user.getEmail());
 
-            modelAndView.setViewName("successfulRegisteration");
+            modelAndView.setViewName("successfulRegistration");
         }
 
         return modelAndView;
@@ -78,15 +78,15 @@ public class UserController {
 
         if(token != null)
         {
+            modelAndView.addObject("message","The link is invalid or broken!");
+            modelAndView.setViewName("error");
+        }
+        else
+        {
             User user = userDao.findByEmailIgnoreCase(token.getUser().getEmail());
             user.setEnabled(true);
             userDao.save(user);
             modelAndView.setViewName("accountVerified");
-        }
-        else
-        {
-            modelAndView.addObject("message","The link is invalid or broken!");
-            modelAndView.setViewName("error");
         }
 
         return modelAndView;
