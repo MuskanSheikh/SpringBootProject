@@ -1,14 +1,27 @@
 package com.Spring.SpringBoot.services;
 
+import com.Spring.SpringBoot.entity.ConfirmationToken;
+import com.Spring.SpringBoot.entity.User;
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service("emailSenderService")
 public class EmailSenderService {
 
+    @Autowired
+    private Configuration config;
+    @Autowired
     private JavaMailSender javaMailSender;
 
     @Autowired
@@ -16,8 +29,23 @@ public class EmailSenderService {
         this.javaMailSender = javaMailSender;
     }
 
-    @Async
-    public void sendEmail(SimpleMailMessage emailId) {
-        javaMailSender.send(emailId);
+    public void sendEmail(User user,ConfirmationToken token) throws MessagingException, IOException, TemplateException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+        helper.setSubject("Successfull registration email");
+        helper.setTo(user.getEmail());
+        String emailContent = getEmailContent(user,token);
+        helper.setText(emailContent, true);
+        javaMailSender.send(mimeMessage);
+    }
+
+    String getEmailContent(User user, ConfirmationToken token) throws IOException, TemplateException {
+        //ConfirmationToken confirmationToken=new ConfirmationToken();
+        StringWriter stringWriter = new StringWriter();
+        Map<String, Object> model = new HashMap<>();
+        model.put("user", user.getUsername());
+        model.put("token",token.getConfirmationToken());
+        config.getTemplate("email.ftlh").process(model, stringWriter);
+        return stringWriter.getBuffer().toString();
     }
 }
