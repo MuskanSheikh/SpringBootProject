@@ -6,22 +6,36 @@ import com.Spring.SpringBoot.entity.ConfirmationToken;
 import com.Spring.SpringBoot.entity.User;
 import com.Spring.SpringBoot.services.EmailSenderService;
 import freemarker.template.TemplateException;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
-//@RequestMapping("/api/")
+//@RequestMapping("/user")
 public class UserController {
+
+    @Autowired
+    private  BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private UserDao userDao;
 
@@ -35,39 +49,28 @@ public class UserController {
     @RequestMapping(value="/register", method = RequestMethod.GET)
     public ModelAndView displayRegistration(ModelAndView modelAndView, User user)
     {
+        modelAndView.addObject("title","User-Signup");
         modelAndView.addObject("user", user);
         modelAndView.setViewName("register");
         return modelAndView;
     }
-
     @RequestMapping(value="/register", method = RequestMethod.POST)
     public ModelAndView registerUser(ModelAndView modelAndView, User user) throws MessagingException, TemplateException, IOException {
 
         User existingEmail = userDao.findByEmailIgnoreCase(user.getEmail());
         if(existingEmail != null)
         {
-            modelAndView.addObject("message","This email is already exists!");
+            modelAndView.addObject("message","Email already exists");
             modelAndView.setViewName("error");
         }
         else
         {
-            PasswordEncoder passwordEncoder =new BCryptPasswordEncoder();
-            String encodedPassword=passwordEncoder.encode(user.getPassword());
-            user.setPassword(encodedPassword);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
             userDao.save(user);
             ConfirmationToken confirmationToken = new ConfirmationToken(user);
             confirmationTokenDao.save(confirmationToken);
-
-            /*SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setTo(user.getEmail());
-            mailMessage.setSubject("Complete Registration!");
-            mailMessage.setText("To confirm your account, please click here : "
-                    +"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
-            */
-           // emailSenderService.sendEmail(mimeMessage);
             emailSenderService.sendEmail(user,confirmationToken);
-            //modelAndView.addObject("link","http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
-            //modelAndView.addObject("username",user.getUsername());
             modelAndView.addObject("email", user.getEmail());
             modelAndView.setViewName("successfulRegistration");
         }
@@ -83,7 +86,7 @@ public class UserController {
         if(token != null)
         {
             User user = userDao.findByEmailIgnoreCase(token.getUser().getEmail());
-            user.setEnabled(true);
+            user.setIsEnabled(true);
             userDao.save(user);
             modelAndView.setViewName("accountVerified");
         }
@@ -95,4 +98,102 @@ public class UserController {
 
         return modelAndView;
     }
+
+    @RequestMapping(value="/reset_password", method = RequestMethod.GET)
+    public ModelAndView displayResetPasswordForm(ModelAndView modelAndView)
+    {
+        modelAndView.addObject("title","Reset Password");
+        modelAndView.setViewName("reset_password");
+        return modelAndView;
+    }
+    @RequestMapping(value="/reset_password", method = RequestMethod.POST)
+    public ModelAndView ProcessResetPassword(ModelAndView modelAndView, HttpServletRequest request,User user,
+                                             @RequestParam("email") String email)
+            throws MessagingException, TemplateException, IOException {
+       // String email=request.getParameter("email");
+        String token= RandomString.make(45);
+
+        User Exemail = userDao.findByEmailIgnoreCase(email);
+        if(Exemail != null)
+        {
+            Exemail.setResetPasswordToken(token);
+            userDao.save(Exemail);
+            String Rtoken=Exemail.getResetPasswordToken();
+            emailSenderService.sendEmail(email,Rtoken);
+            modelAndView.addObject("email", user.getEmail());
+            modelAndView.setViewName("successfulRegistration");
+        }
+        else{
+            modelAndView.addObject("message","can not find email");
+            modelAndView.setViewName("error");
+        }
+
+        return modelAndView;
+    }
+
+   @RequestMapping(value="/confirm-reset", method= {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView confirmReset(ModelAndView modelAndView, @RequestParam("token")String resetToken)
+    {
+        User Rtoken=userDao.findByResetPasswordToken(resetToken);
+
+        if(Rtoken != null)
+        {
+            modelAndView.addObject("token",Rtoken);
+            modelAndView.setViewName("NewPassword");
+            User user=userDao.findByEmailIgnoreCase(Rtoken.getEmail());
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
+            user.setResetPasswordToken(null);
+            userDao.save(user);
+        }
+        else
+        {
+            modelAndView.addObject("message","The link is invalid or broken!");
+            modelAndView.setViewName("error");
+        }
+
+        return modelAndView;
+    }
+
+    @GetMapping (value="/login")
+    public String login(ModelAndView model)
+    {
+        model.addObject("title", "Log in page");
+        return "login";
+    }
+
+    @GetMapping(value="/dashboard")
+    public String dashboard(ModelAndView model)
+    {
+        model.addObject("title","dashboard");
+        return "dashboard";
+    }
+
+
+    @GetMapping("/findUser")
+    public ResponseEntity<Map<String, Object>> getUserByName(@RequestParam(required = false) String email,
+                                                    @RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "3") int size)
+    {
+        try {
+            List<User> user = new ArrayList<User>();
+            Pageable paging = PageRequest.of(page, size);
+
+            Page<User> pageU;
+            if (email==null)
+                pageU = userDao.findAll(paging);
+            else
+                pageU = userDao.findByEmailContaining(email, paging);
+            user = pageU.getContent();
+            Map<String, Object> response = new HashMap<>();
+            response.put("User", user);
+            response.put("CurrentPage", pageU.getNumber());
+            response.put("TotalItems", pageU.getTotalElements());
+            response.put("TotalPages", pageU.getTotalPages());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

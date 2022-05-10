@@ -40,12 +40,34 @@ public class EmailSenderService {
     }
 
     String getEmailContent(User user, ConfirmationToken token) throws IOException, TemplateException {
-        //ConfirmationToken confirmationToken=new ConfirmationToken();
         StringWriter stringWriter = new StringWriter();
         Map<String, Object> model = new HashMap<>();
-        model.put("user", user.getUsername());
+        model.put("user", user.getFirstname()+" "+user.getLastname());
         model.put("token",token.getConfirmationToken());
         config.getTemplate("email.ftlh").process(model, stringWriter);
         return stringWriter.getBuffer().toString();
     }
+
+    public void sendEmail(String email, String token)throws MessagingException, IOException, TemplateException {
+        //User user=new User();
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+        helper.setSubject("Reset Password Email");
+        helper.setTo(email);
+        String emailContent = getEmailContent(email,token);
+        helper.setText(emailContent, true);
+        javaMailSender.send(mimeMessage);
+    }
+
+    String getEmailContent(String email, String token) throws IOException, TemplateException {
+
+        User user=new User();
+        StringWriter stringWriter = new StringWriter();
+        Map<String, Object> model = new HashMap<>();
+        model.put("user", email);
+        model.put("token",token);
+        config.getTemplate("ResetEmail.ftlh").process(model, stringWriter);
+        return stringWriter.getBuffer().toString();
+    }
+
 }

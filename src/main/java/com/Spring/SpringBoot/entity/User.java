@@ -3,7 +3,6 @@ package com.Spring.SpringBoot.entity;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
 @Entity
@@ -12,12 +11,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    //user name should not be null or empty
-    //user name must be unique
-    @Column(name="username", nullable = false)
-    @NotEmpty
-    private String username;
 
     @NotBlank
     @Column(name="firstname", nullable = false)
@@ -36,38 +29,37 @@ public class User {
 
     //password should not be null or empty
     //password should have atleast 8 character
-    @NotEmpty
+    
+    @NotBlank
     @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,128}$",
             message = "at least one uppercase letter, " +'\'' +
                     "one lowercase letter," +'\'' +
                     " one number and one special character:")
     /*@Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[\\W_])")*/
     private String password;
+    @Column(name="is_enabled", updatable = true)
     private boolean isEnabled;
 
+    @NotBlank
+    @Column(name="confirm_password", updatable=true)
+    private String confirmPassword;
+
+    @Column(name="reset_password_token", updatable = true)
+    private String resetPasswordToken;
 
 
     public User() {
+        //resetPasswordToken= UUID.randomUUID().toString();
     }
 
-    public User(String username, String firstname, String lastname, String email, String password,boolean isEnabled) {
-        this.username = username;
+    public User(String firstname, String lastname, String email, String password,boolean isEnabled,String confirmPassword, String newPassword) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
         this.isEnabled=isEnabled;
+        this.confirmPassword=confirmPassword;
     }
-
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getFirstname() {
         return firstname;
     }
@@ -109,24 +101,41 @@ public class User {
         this.id = id;
     }
 
-    public boolean isEnabled() {
+    public boolean getIsEnabled() {
         return isEnabled;
     }
 
-    public void setEnabled(boolean isEnabled) {
-        isEnabled = isEnabled;
+    public void setIsEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
+
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
+
+    public void setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", password='" + isEnabled + '\'' +
+                ", Is Enable='" + isEnabled + '\'' +
+                ", Confirm Password='" + confirmPassword + '\'' +
                 '}';
     }
 }

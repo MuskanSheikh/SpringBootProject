@@ -1,0 +1,54 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org" th:replace="base::layout(~{::section})"><head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <!-- Title Page-->
+    <title>Registration form</title>
+
+    <!-- Font special for pages-->
+
+    <!-- Main CSS-->
+</head>
+<body>
+<section>
+    <div class="page-wrapper p-t-100 p-b-50" style="background-color:#3073c9;">
+        <div class="wrapper wrapper--w900">
+            <div class="card" style="width: 45rem;">
+                <div class="card-body">
+                    <form th:action="@{/dashboard}" method="get">
+                        <div class="form-row">
+                            <div class="value"><h2><b>Log in</b></h2>
+                                <br><p class="color">Please fill in this form to log-in your account! </p></div>
+                        </div>
+                        <div class="value">
+                            <div class="input-group">
+                                <input class="input--style-6"  name="email" placeholder="Email"
+                                required autofocus>
+                            </div>
+                        </div>
+                        <div class="value">
+                            <div class="input-group">
+                                <input class="input--style-6 "  type="password" name="password"
+                                       placeholder="Password" minlength="6" maxlength="18">
+                            </div>
+                        </div>
+                        <div class="value">
+                            <div class="input-group">
+                                <button class="btn btn--radius-2 btn--blue-2" type="submit">Log in</button>
+                            </div>
+                        </div>
+                        <div class="value">
+                        <div class="input-group">
+                            <a th:href="@{/reset_password}">Forgot password</a>
+                        </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main JS-->
+</section>
+</body>
+</html>
