@@ -6,10 +6,10 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.annotation.PostConstruct;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -81,6 +81,7 @@ public class FileStorageService {
     {
         FileSystemUtils.deleteRecursively(Paths.get(uploadPath).toFile());
     }
+
     //list all files
     public List<Path> loadAll()
     {

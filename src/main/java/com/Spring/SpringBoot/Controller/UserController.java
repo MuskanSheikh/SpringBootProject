@@ -1,8 +1,10 @@
 package com.Spring.SpringBoot.Controller;
 
 import com.Spring.SpringBoot.Dao.ConfirmationTokenDao;
+import com.Spring.SpringBoot.Dao.ProductDao;
 import com.Spring.SpringBoot.Dao.UserDao;
 import com.Spring.SpringBoot.entity.ConfirmationToken;
+import com.Spring.SpringBoot.entity.Products;
 import com.Spring.SpringBoot.entity.User;
 import com.Spring.SpringBoot.services.EmailSenderService;
 import freemarker.template.TemplateException;
@@ -23,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,13 +35,16 @@ import java.util.Map;
 //@RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private  BCryptPasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Autowired
     private UserDao userDao;
 
     @Autowired
     private ConfirmationTokenDao confirmationTokenDao;
+
+    @Autowired
+    private ProductDao productDao;
 
     @Autowired
     private EmailSenderService emailSenderService;
@@ -107,10 +111,9 @@ public class UserController {
         return modelAndView;
     }
     @RequestMapping(value="/reset_password", method = RequestMethod.POST)
-    public ModelAndView ProcessResetPassword(ModelAndView modelAndView, HttpServletRequest request,User user,
+    public ModelAndView ProcessResetPassword(ModelAndView modelAndView/*, HttpServletRequest request*/,User user,
                                              @RequestParam("email") String email)
             throws MessagingException, TemplateException, IOException {
-       // String email=request.getParameter("email");
         String token= RandomString.make(45);
 
         User Exemail = userDao.findByEmailIgnoreCase(email);
@@ -163,10 +166,15 @@ public class UserController {
     }
 
     @GetMapping(value="/dashboard")
-    public String dashboard(ModelAndView model)
+    public ModelAndView dashboard(ModelAndView model)
     {
+        Pageable pageable=PageRequest.of(0,10);
+        Page<Products> page= productDao.findAll(pageable);
+        List<Products> productsList=page.getContent();
         model.addObject("title","dashboard");
-        return "dashboard";
+
+        model.addObject("products",productsList);
+        return model;
     }
 
 
