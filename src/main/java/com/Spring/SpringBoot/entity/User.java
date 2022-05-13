@@ -37,14 +37,15 @@ public class User {
                     " one number and one special character:")
     /*@Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[\\W_])")*/
     private String password;
-    @Column(name="is_enabled", updatable = true)
+
+    @Column(name="is_enabled", updatable = true,nullable = true)
     private boolean isEnabled;
 
     @NotBlank
     @Column(name="confirm_password", updatable=true)
     private String confirmPassword;
 
-    @Column(name="reset_password_token", updatable = true)
+    @Column(name="reset_password_token", updatable = true, nullable = true)
     private String resetPasswordToken;
 
 

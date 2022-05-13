@@ -11,6 +11,8 @@ public class Products {
     @Column(name="pr_id")
     private long pr_id;
 
+    @Column(name="pr_img", columnDefinition ="MEDIUMBLOB")
+    private String pr_img;
 
     @Column(name="pr_name")
     private String pr_name;
@@ -44,6 +46,14 @@ public class Products {
 
     public void setPr_name(String pr_name) {
         this.pr_name = pr_name;
+    }
+
+    public String getPr_img() {
+        return pr_img;
+    }
+
+    public void setPr_img(String pr_img) {
+        this.pr_img = pr_img;
     }
 
     public String getPr_brand() {
