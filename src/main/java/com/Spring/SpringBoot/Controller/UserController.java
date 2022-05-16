@@ -18,6 +18,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -161,15 +164,26 @@ public class UserController {
     public String login(ModelAndView model)
     {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null || authentication instanceof AnonymousAuthenticationToken)
+        if(authentication==null || authentication instanceof AnonymousAuthenticationToken)
         {
-            //model.addObject("name",authentication.getName());
             return "login";
         }
         model.addObject("title", "Log in page");
-        return "redirect:/dashboard";
+        return "dashboard";
     }
 
+    @GetMapping(value="/logout")
+    public String Logout(ModelAndView model, HttpServletRequest request, HttpServletResponse response)
+    {
+        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+        if(authentication != null)
+        {
+            new SecurityContextLogoutHandler().logout(request,response,authentication);
+        }
+        model.addObject("title","logout");
+        model.addObject("message","Oops!! Something wents wrong");
+        return "redirect:/login?logout";
+    }
 
     @GetMapping(value="/dashboard")
     public ModelAndView dashboard(ModelAndView model)

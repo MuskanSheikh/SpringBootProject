@@ -15,11 +15,11 @@
         <div class="wrapper wrapper--w900">
             <div class="card" style="width: 45rem;">
                 <div class="card-body">
-                    <div th:if="${param.error}">
-                        <p class="text-danger text-center" style="font-size:18px;">Invalid Username or Password</p>
+                    <div th:if="${param.error}" class="alert alert-danger">
+                        <div class="text-danger text-center" style="font-size:18px;">Invalid Email or Password</div>
                     </div>
-                    <div th:if="${param.logout}">
-                        <p class="text-warning text-center" style="font-size:18px;">You have been logout successfully</p>
+                    <div th:if="${param.logout}" class="alert alert-success">
+                        <div class="text-warning text-center" style="font-size:18px;">You have been successfully logout</div>
                     </div>
                     <form th:action="@{/login}" method="post">
                         <div class="form-row">
@@ -28,7 +28,7 @@
                         </div>
                         <div class="value">
                             <div class="input-group">
-                                <input class="input--style-6" type="email" name="email" placeholder="Email"
+                                <input class="input--style-6"  type="email" name="email" placeholder="Email"
                                 required autofocus>
                             </div>
                         </div>

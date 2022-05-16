@@ -11,7 +11,7 @@ public class Products {
     @Column(name="pr_id")
     private long pr_id;
 
-    @Column(name="pr_img", columnDefinition ="MEDIUMBLOB")
+    @Column(name="pr_img")
     private String pr_img;
 
     @Column(name="pr_name")

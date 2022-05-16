@@ -25,10 +25,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .usernameParameter("email")
                 .passwordParameter("password")
+                //.loginProcessingUrl("/dashboard")
                 .defaultSuccessUrl("/dashboard")
                 .permitAll()
                 .and()
-                .logout().logoutSuccessUrl("/").permitAll();
+                .logout().logoutSuccessUrl("/login");
                 //.antMatchers("/register").permitAll()
                 //.antMatchers("/confirm").permitAll();
 
