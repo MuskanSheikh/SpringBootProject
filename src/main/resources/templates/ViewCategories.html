@@ -25,8 +25,8 @@
             <tr th:each="Cat, iStat : ${categories}">
                 <th scope="row" th:text="${iStat.index +1}">1</th>
                 <td th:text="${Cat.Cname}"></td>
-                <td><a href="#" class="btn btn-danger">Delete</a></td>
-                <td><a href="#" class="btn btn-warning">Update</a></td>
+                <td><a href="" th:href="@{/deleteCategory?(id=${Cat.Cid})}" class="btn btn-danger">Delete</a></td>
+                <td><a href=""  th:href="@{/updateCategory?(id=${Cat.Cid})}" class="btn btn-warning">Update</a></td>
             </tr>
             </tbody>
         </table>

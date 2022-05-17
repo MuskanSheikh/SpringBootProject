@@ -5,9 +5,9 @@ import com.Spring.SpringBoot.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 public class AdminController {
@@ -45,5 +45,26 @@ public class AdminController {
         return "redirect:/categories";
     }
 
+    @GetMapping("/deleteCategory")
+    public String deleteCat(@RequestParam("id") long Cid)
+    {
+        categoryDao.deleteById(Cid);
+        return "redirect:/categories";
+    }
+
+    @GetMapping("/updateCategory")
+    public String updateCat(@RequestParam("id") long Cid, Model model)
+    {
+        Optional<Category> category= categoryDao.findById(Cid);
+        if(category.isPresent())
+        {
+            model.addAttribute("category", category.get());
+            return "AddCategory";
+        }
+        else{
+            return "404";
+        }
+        //return "redirect:/categories";
+    }
 
 }
