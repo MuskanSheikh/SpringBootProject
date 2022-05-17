@@ -11,4 +11,20 @@ public class Category {
 
     @Column(name="cat_name")
     private String Cname;
+
+    public long getCid() {
+        return Cid;
+    }
+
+    public void setCid(long Cid) {
+        this.Cid = Cid;
+    }
+
+    public String getCname() {
+        return Cname;
+    }
+
+    public void setCname(String Cname) {
+        this.Cname = Cname;
+    }
 }

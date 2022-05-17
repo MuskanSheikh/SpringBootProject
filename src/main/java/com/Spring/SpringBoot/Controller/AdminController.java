@@ -25,7 +25,7 @@ public class AdminController {
     @GetMapping(value="/categories")
     public String getcategories(Model model)
     {
-        model.addAttribute("catagories", categoryDao.findAll());
+        model.addAttribute("categories", categoryDao.findAll());
         model.addAttribute("title","List Categories");
         return "ViewCategories";
     }
@@ -38,11 +38,11 @@ public class AdminController {
         return "AddCategory";
     }
 
-    @PostMapping(value="/addcategory")
+    @PostMapping(value="/addCategory")
     public String getAllCat(@ModelAttribute("category") Category category)
     {
         categoryDao.save(category);
-        return "ViewCategories";
+        return "redirect:/categories";
     }
 
 
