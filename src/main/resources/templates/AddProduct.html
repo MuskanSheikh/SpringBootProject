@@ -1,0 +1,75 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org" th:replace="base::layout(~{::section})">
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <!-- Title Page-->
+    <title>Add Categories</title>
+
+
+</head>
+<body>
+<section class="section-products">
+    <div class="container py-5">
+        <div class="wrapper wrapper--w900">
+            <div class="card" style="width: 45rem;">
+                <div class="card-body">
+                    <form class="form-inline" method="post" th:action="@{/addProduct}" th:object="${productDTO}">
+                        <div class="form-row">
+                            <div class="value"><h2><b>Products</b></h2>
+                                <br><p class="color">Add a product</p></div>
+                        </div>
+
+                        <input type="hidden"  th:field="*{Pid}" name="id">
+                        <div class="form-group" style="padding-top:20px; padding-bottom:10px;">
+                            <label >Choose category</label>
+                            <Select class="input--style-6"  type="text" name="category" th:field="*{categoryId}"
+                                    placeholder="Choose Category">
+                                <option th:each="category : ${categories}"
+                                        th:value="${category.Cid}"
+                                        th:text="${category.Cname}">
+                            </Select>
+                            </div>
+
+                        <div class="form-group" style="padding-top:20px; padding-bottom:10px;">
+                            <label style="padding-bottom:6px;">Product Name</label>
+                            <input class="form-control" type="text"  name="name" th:field="*{Pname}" required placeholder="name">
+                        </div>
+
+                        <div class="form-group" style="padding-top:20px; padding-bottom:10px;">
+                            <label style="padding-bottom:6px;">Product Brand</label>
+                            <input class="form-control" type="text" name="brand" th:field="*{Pbrand}" placeholder="Brand"
+                                   required>
+                        </div>
+
+                        <div class="form-group" style="padding-top:20px; padding-bottom:10px;">
+                            <label style="padding-bottom:6px;">Product Price</label>
+                            <input class="form-control" type="text" name="price" th:field="*{Pprice}" placeholder="Price">
+                        </div>
+
+                        <div class="form-group" style="padding-top:20px; padding-bottom:10px;">
+                            <label style="padding-bottom:6px;">Product Description</label>
+                            <input class="form-control" type="text" name="description" th:field="*{Pdesc}" placeholder="Enter Description"
+                                   required>
+                        </div>
+
+                        <div class="form-group" style="padding-top:20px; padding-bottom:10px;">
+                            <label style="padding-bottom:6px;">Product Image</label>
+                            <input class="form-control" type="file" name="image" accept="image/jpeg"
+                                   th:field="*{Pimg}" placeholder="Choose file..." id="customFile">
+                            <label class="custom-file-label" for="customFile">Choose file</label>
+                        </div>
+                        <div class="form-group" style="padding-top:20px; padding-bottom:10px;">
+                            <img scr="" height="100px" width="100px">
+                        </div>
+                        <input type="hidden" name="imgName" th:value="${productDTO.PimgName}">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
