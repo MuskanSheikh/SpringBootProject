@@ -22,9 +22,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="category, iStat : ${catagories}">
+            <tr th:each="Cat, iStat : ${categories}">
                 <th scope="row" th:text="${iStat.index +1}">1</th>
-                <td th:text="${category.name}"></td>
+                <td th:text="${Cat.Cname}"></td>
                 <td><a href="#" class="btn btn-danger">Delete</a></td>
                 <td><a href="#" class="btn btn-warning">Update</a></td>
             </tr>
