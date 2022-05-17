@@ -9,91 +9,116 @@ public class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="pr_id")
-    private long pr_id;
+    private long Pid;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cat_id",referencedColumnName = "cat_id")
+    private Category category;
 
     @Column(name="pr_img")
-    private String pr_img;
+    private String Pimg;
+
+    @Column(name="pr_img_nm")
+    private String PimgName;
 
     @Column(name="pr_name")
-    private String pr_name;
+    private String Pname;
 
     @Column(name="pr_brand")
-    private String pr_brand;
+    private String Pbrand;
 
     @Column(name="pr_madein")
-    private String pr_madein;
+    private String Pmadein;
 
     @Column(name="pr_desc")
-    private String pr_desc;
+    private String Pdesc;
 
     @Column(name="pr_price")
-    private long pr_price;
+    private long Pprice;
 
     public Products() {
     }
 
-    public long getPr_id() {
-        return pr_id;
+    public long getPid() {
+        return Pid;
     }
 
-    public void setPr_id(long pr_id) {
-        this.pr_id = pr_id;
+    public void setPid(long pid) {
+        Pid = pid;
     }
 
-    public String getPr_name() {
-        return pr_name;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setPr_name(String pr_name) {
-        this.pr_name = pr_name;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    public String getPr_img() {
-        return pr_img;
+    public String getPimg() {
+        return Pimg;
     }
 
-    public void setPr_img(String pr_img) {
-        this.pr_img = pr_img;
+    public void setPimg(String pimg) {
+        Pimg = pimg;
     }
 
-    public String getPr_brand() {
-        return pr_brand;
+    public String getPimgName() {
+        return PimgName;
     }
 
-    public void setPr_brand(String pr_brand) {
-        this.pr_brand = pr_brand;
+    public void setPimgName(String pimgName) {
+        PimgName = pimgName;
     }
 
-    public String getPr_madein() {
-        return pr_madein;
+    public String getPname() {
+        return Pname;
     }
 
-    public void setPr_madein(String pr_madein) {
-        this.pr_madein = pr_madein;
+    public void setPname(String pname) {
+        Pname = pname;
     }
 
-    public String getPr_desc() {
-        return pr_desc;
+    public String getPbrand() {
+        return Pbrand;
     }
 
-    public void setPr_desc(String pr_desc) {
-        this.pr_desc = pr_desc;
+    public void setPbrand(String pbrand) {
+        Pbrand = pbrand;
     }
 
-    public long getPr_price() {
-        return pr_price;
+    public String getPmadein() {
+        return Pmadein;
     }
 
-    public void setPr_price(long pr_price) {
-        this.pr_price = pr_price;
+    public void setPmadein(String pmadein) {
+        Pmadein = pmadein;
     }
 
-    public Products(long pr_id, String pr_name, String pr_brand, String pr_madein, String pr_desc, long pr_price) {
-        this.pr_id = pr_id;
-        this.pr_name = pr_name;
-        this.pr_brand = pr_brand;
-        this.pr_madein = pr_madein;
-        this.pr_desc = pr_desc;
-        this.pr_price = pr_price;
+    public String getPdesc() {
+        return Pdesc;
+    }
+
+    public void setPdesc(String pdesc) {
+        Pdesc = pdesc;
+    }
+
+    public long getPprice() {
+        return Pprice;
+    }
+
+    public void setPprice(long pprice) {
+        Pprice = pprice;
+    }
+
+    public Products(long pid, Category category, String pimg, String pname, String pbrand, String pmadein, String pdesc, long pprice) {
+        Pid = pid;
+        this.category = category;
+        Pimg = pimg;
+        Pname = pname;
+        Pbrand = pbrand;
+        Pmadein = pmadein;
+        Pdesc = pdesc;
+        Pprice = pprice;
     }
 }
