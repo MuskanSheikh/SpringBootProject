@@ -14,16 +14,16 @@
         <div class="wrapper wrapper--w900">
             <div class="card" style="width: 45rem;">
                 <div class="card-body">
-        <form class="form-inline" method="post" action="#">
+        <form class="form-inline" method="post" action="#" th:object="${category}">
             <div class="form-row">
                 <div class="value"><h2><b>Add category</b></h2>
                     <br><p class="color">fill this form to add category</p></div>
             </div>
-            <input type="hidden" style="padding-top:20px;" class="form-control" id="exampleInputId1"
+            <input type="hidden" style="padding-top:20px;" th:field="*{Cid}" class="form-control" id="exampleInputId1"
                    placeholder="Password">
             <div class="value">
                 <div class="input-group">
-                    <input class="input--style-6"  type="text" name="category" placeholder="Category name"
+                    <input class="input--style-6"  type="text" name="category" th:field="*{Cname}" placeholder="Category name"
                            required>
                 </div>
             </div>

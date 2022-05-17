@@ -18,13 +18,13 @@
                 <th scope="col">SN</th>
                 <th scope="col">Category Name</th>
                 <th scope="col">Manage Delete</th>
-                <th scope="col">Manege Pudate</th>
+                <th scope="col">Manege Update</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
+            <tr th:each="category, iStat : ${catagories}">
+                <th scope="row" th:text="${iStat.index +1}">1</th>
+                <td th:text="${category.name}"></td>
                 <td><a href="#" class="btn btn-danger">Delete</a></td>
                 <td><a href="#" class="btn btn-warning">Update</a></td>
             </tr>
