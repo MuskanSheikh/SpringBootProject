@@ -14,7 +14,8 @@
         <div class="wrapper wrapper--w900">
             <div class="card" style="width: 45rem;">
                 <div class="card-body">
-                    <form class="form-inline" method="post" th:action="@{/addProduct}" th:object="${productDTO}">
+                    <form class="form-inline" method="Post"  th:action="@{/addProduct}"  enctype="multipart/form-data"
+                          th:object="${product}">
                         <div class="form-row">
                             <div class="value"><h2><b>Products</b></h2>
                                 <br><p class="color">Add a product</p></div>
@@ -23,7 +24,7 @@
                         <input type="hidden"  th:field="*{Pid}" name="id">
                         <div class="form-group" style="padding-top:20px; padding-bottom:10px;">
                             <label >Choose category</label>
-                            <Select class="input--style-6"  type="text" name="category" th:field="*{categoryId}"
+                            <Select class="input--style-6"  type="text" name="category" th:field="*{category}"
                                     placeholder="Choose Category">
                                 <option th:each="category : ${categories}"
                                         th:value="${category.Cid}"
@@ -55,20 +56,34 @@
 
                         <div class="form-group" style="padding-top:20px; padding-bottom:10px;">
                             <label style="padding-bottom:6px;">Product Image</label>
-                            <input class="form-control" type="file" name="image" accept="image/jpeg"
+                            <input class="form-control" type="file" name="image" accept="image/jpeg" onchange="readURL(this);"
                                    th:field="*{Pimg}" placeholder="Choose file..." id="customFile">
                             <label class="custom-file-label" for="customFile">Choose file</label>
                         </div>
                         <div class="form-group" style="padding-top:20px; padding-bottom:10px;">
-                            <img scr="" height="100px" width="100px">
+                            <img scr="" alt="product" id="blah" height="100px" width="100px">
                         </div>
-                        <input type="hidden" name="imgName" th:value="${productDTO.PimgName}">
+                        <input type="hidden" name="imgName" th:value="${product.PimgName}">
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      $('#blah')
+        .attr('src', e.target.result)
+        .width(150)
+        .height(200);
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+    </script>
 </section>
 
 </body>

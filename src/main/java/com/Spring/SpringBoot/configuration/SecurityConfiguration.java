@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;
 
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -67,4 +68,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
        auth.authenticationProvider(authenticationProvider());
 
     }
+
+
 }

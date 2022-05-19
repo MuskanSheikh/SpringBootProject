@@ -1,5 +1,6 @@
 package com.Spring.SpringBoot.entity;
 
+
 import javax.persistence.*;
 
 @Entity
@@ -16,7 +17,7 @@ public class Products {
     private Category category;
 
     @Column(name="pr_img")
-    private String Pimg;
+    private byte[] Pimg;
 
     @Column(name="pr_img_nm")
     private String PimgName;
@@ -55,12 +56,12 @@ public class Products {
         this.category = category;
     }
 
-    public String getPimg() {
+    public byte[] getPimg() {
         return Pimg;
     }
 
-    public void setPimg(String pimg) {
-        Pimg = pimg;
+    public void setPimg(byte[] Pimg) {
+        this.Pimg = Pimg;
     }
 
     public String getPimgName() {
@@ -111,14 +112,30 @@ public class Products {
         Pprice = pprice;
     }
 
-    public Products(long pid, Category category, String pimg, String pname, String pbrand, String pmadein, String pdesc, long pprice) {
+    public Products(long pid, Category category, byte[] pimg, String pimgName,String pname, String pbrand, String pmadein, String pdesc, long pprice) {
         Pid = pid;
         this.category = category;
         Pimg = pimg;
+        PimgName=pimgName;
         Pname = pname;
         Pbrand = pbrand;
         Pmadein = pmadein;
         Pdesc = pdesc;
         Pprice = pprice;
+    }
+
+    @Override
+    public String toString() {
+        return "Products{" +
+                "Pid=" + Pid +
+                ", category=" + category +
+                ", Pimg='" + Pimg + '\'' +
+                ", PimgName='" + PimgName + '\'' +
+                ", Pname='" + Pname + '\'' +
+                ", Pbrand='" + Pbrand + '\'' +
+                ", Pmadein='" + Pmadein + '\'' +
+                ", Pdesc='" + Pdesc + '\'' +
+                ", Pprice=" + Pprice +
+                '}';
     }
 }
