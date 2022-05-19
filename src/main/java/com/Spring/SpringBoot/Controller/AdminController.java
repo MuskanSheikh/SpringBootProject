@@ -1,6 +1,5 @@
 package com.Spring.SpringBoot.Controller;
 
-import com.Spring.SpringBoot.DTO.ProductDTO;
 import com.Spring.SpringBoot.Dao.CategoryDao;
 import com.Spring.SpringBoot.Dao.ProductDao;
 import com.Spring.SpringBoot.entity.Category;
@@ -11,17 +10,23 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 @Controller
 public class AdminController {
+
+    public static String uploadDir=System.getProperty("user.dir")+"src/main/resources/static/productImages";
+
 
     @Autowired
     private CategoryDao categoryDao;
@@ -97,26 +102,33 @@ public class AdminController {
     }
 
     @GetMapping(value ="/addProduct")
-    public String addProduct(Model model)
+    public String addProduct(Model model, Products products)
     {
-        model.addAttribute("productDTO", new ProductDTO());
+        model.addAttribute("product", products);
         model.addAttribute("categories",categoryDao.findAll());
         model.addAttribute("title","Add Categories");
         return "AddProduct";
     }
 
-    @PostMapping(value="/addProduct")
-    public String addProductPost(@ModelAttribute("productDTO") ProductDTO productDTO, @RequestParam("image") MultipartFile file,
-                                 @RequestParam("imgName") MultipartFile name)
+    @RequestMapping(value="/addProduct", method = POST)
+    public String addProductPost(Products products, @RequestParam("image")MultipartFile file) throws IOException
     {
-        Products products=new Products();
-        products.setPid(productDTO.getPid());
-        products.setPname(productDTO.getPname());
-        products.setCategory(categoryDao.findById(productDTO.getCategoryId()).get());
-        products.setPbrand(productDTO.getPbrand());
-        products.setPdesc(productDTO.getPdesc());
-        products.setPmadein(productDTO.getPmadein());
-        products.setPprice(productDTO.getPprice());
+        String imageUUID ;
+        byte[] data=file.getBytes();
+        if(!file.isEmpty())
+        {
+            imageUUID= file.getOriginalFilename();
+            Path imgPathAndName = Paths.get(uploadDir,imageUUID);
+            Files.write(imgPathAndName,data);
+        }else{
+            imageUUID = products.getPimgName();
+        }
+        products.setPimgName(imageUUID);
+        products.setPimg(data);
+        //System.out.println(products);
+        productDao.save(products);
         return "redirect:/products";
     }
+
 }
+
