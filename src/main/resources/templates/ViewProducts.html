@@ -28,11 +28,17 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="Cat, iStat : ${categories}">
+            <tr th:each="pro, iStat : ${products}">
                 <th scope="row" th:text="${iStat.index +1}">1</th>
-                <td th:text="${Cat.Cname}"></td>
-                <td><a href="" th:href="@{/deleteCategory?(id=${Cat.Cid})}" class="btn btn-danger">Delete</a></td>
-                <td><a href=""  th:href="@{/updateCategory?(id=${Cat.Cid})}" class="btn btn-warning">Update</a></td>
+                <td th:text="${pro.category}"></td>
+                <td><img th:src="@{/${pro.photosImagePath}}"></td>
+                <td th:text="${pro.Pname}"></td>
+                <td th:text="${pro.Pbrand}"></td>
+                <td th:text="${pro.Pprice}"></td>
+                <td th:text="${pro.Pmadein}"></td>
+                <td th:text="${pro.Pdesc}"></td>
+                <td><a href="" th:href="@{/deleteCategory?(id=${pro.Pid})}" class="btn btn-danger">Delete</a></td>
+                <td><a href=""  th:href="@{/updateCategory?(id=${pro.Pid})}" class="btn btn-warning">Update</a></td>
             </tr>
             </tbody>
         </table>

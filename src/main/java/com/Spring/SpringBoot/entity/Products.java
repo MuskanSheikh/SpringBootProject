@@ -2,6 +2,8 @@ package com.Spring.SpringBoot.entity;
 
 
 import javax.persistence.*;
+import java.util.Objects;
+
 
 @Entity
 @Table(name="Products")
@@ -17,10 +19,7 @@ public class Products {
     private Category category;
 
     @Column(name="pr_img")
-    private byte[] Pimg;
-
-    @Column(name="pr_img_nm")
-    private String PimgName;
+    private String Pimg;
 
     @Column(name="pr_name")
     private String Pname;
@@ -40,6 +39,13 @@ public class Products {
     public Products() {
     }
 
+    @Transient
+    public String getPhotosImagePath() {
+        if (Pimg == null || Objects.isNull(Pid)) return null;
+
+        return "/productImages/" + Pid +"/" + Pimg;
+    }
+
     public long getPid() {
         return Pid;
     }
@@ -56,20 +62,12 @@ public class Products {
         this.category = category;
     }
 
-    public byte[] getPimg() {
+    public String getPimg() {
         return Pimg;
     }
 
-    public void setPimg(byte[] Pimg) {
+    public void setPimg(String Pimg) {
         this.Pimg = Pimg;
-    }
-
-    public String getPimgName() {
-        return PimgName;
-    }
-
-    public void setPimgName(String pimgName) {
-        PimgName = pimgName;
     }
 
     public String getPname() {
@@ -112,11 +110,12 @@ public class Products {
         Pprice = pprice;
     }
 
-    public Products(long pid, Category category, byte[] pimg, String pimgName,String pname, String pbrand, String pmadein, String pdesc, long pprice) {
+
+
+    public Products(long pid, Category category, String pimg,String pname, String pbrand, String pmadein, String pdesc, long pprice) {
         Pid = pid;
         this.category = category;
         Pimg = pimg;
-        PimgName=pimgName;
         Pname = pname;
         Pbrand = pbrand;
         Pmadein = pmadein;
@@ -130,7 +129,6 @@ public class Products {
                 "Pid=" + Pid +
                 ", category=" + category +
                 ", Pimg='" + Pimg + '\'' +
-                ", PimgName='" + PimgName + '\'' +
                 ", Pname='" + Pname + '\'' +
                 ", Pbrand='" + Pbrand + '\'' +
                 ", Pmadein='" + Pmadein + '\'' +
