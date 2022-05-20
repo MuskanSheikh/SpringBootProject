@@ -8,25 +8,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
 @Controller
 public class AdminController {
+    //public static String uploadDir= ClassPathResource("/static/productImages");
 
-    public static String uploadDir=System.getProperty("user.dir")+"src/main/resources/static/productImages";
-
+   // public static String uploadDir=System.getProperty("user.dir")+"src/main/resources/static/productImages";
 
     @Autowired
     private CategoryDao categoryDao;
@@ -102,21 +103,45 @@ public class AdminController {
     }
 
     @GetMapping(value ="/addProduct")
-    public String addProduct(Model model, Products products)
+    public String addProduct(Model model)
     {
-        model.addAttribute("product", products);
+        model.addAttribute("product", new Products());
         model.addAttribute("categories",categoryDao.findAll());
-        model.addAttribute("title","Add Categories");
+        model.addAttribute("title","Add Products");
         return "AddProduct";
     }
 
-    @RequestMapping(value="/addProduct", method = POST)
-    public String addProductPost(Products products, @RequestParam("image")MultipartFile file) throws IOException
+    @PostMapping(value="/addProduct",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, "multipart/form-data;charset=UTF-8" })
+    public String addProductPost(@ModelAttribute("product") Products products, BindingResult result,
+                                 @RequestParam("imagefile") MultipartFile file, Model model) throws IOException {
+        if(result.hasErrors())
+        {
+            return "AddProduct";
+        }
+
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        products.setPimg(fileName);
+
+        Products savedProducts = productDao.save(products);
+
+        String uploadDir = "./productImages/" + savedProducts.getPid();
+
+        FileUploadUtil.saveFile(uploadDir, fileName, file);
+        productDao.save(products);
+        return "redirect:/products";
+    }
+
+
+    /*@RequestMapping(value="/addProduct", method = POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String addProductPost(@ModelAttribute("product") Products products,
+                                 @RequestParam("imagefile")MultipartFile file) throws IOException
     {
-        String imageUUID ;
-        byte[] data=file.getBytes();
+        String imageUUID= file.getOriginalFilename();
         if(!file.isEmpty())
         {
+            byte[] data= Base64.encodeBase64(products.getPimg().getBytes());
+            String result = new String(data);
+            System.out.println(result);
             imageUUID= file.getOriginalFilename();
             Path imgPathAndName = Paths.get(uploadDir,imageUUID);
             Files.write(imgPathAndName,data);
@@ -124,11 +149,11 @@ public class AdminController {
             imageUUID = products.getPimgName();
         }
         products.setPimgName(imageUUID);
-        products.setPimg(data);
+        //products.setPimg(Stringdata);
         //System.out.println(products);
         productDao.save(products);
         return "redirect:/products";
-    }
+    }*/
 
 }
 
