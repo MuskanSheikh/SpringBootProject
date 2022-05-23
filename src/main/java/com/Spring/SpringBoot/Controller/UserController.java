@@ -4,15 +4,11 @@ import com.Spring.SpringBoot.Dao.ConfirmationTokenDao;
 import com.Spring.SpringBoot.Dao.ProductDao;
 import com.Spring.SpringBoot.Dao.UserDao;
 import com.Spring.SpringBoot.entity.ConfirmationToken;
-import com.Spring.SpringBoot.entity.Products;
 import com.Spring.SpringBoot.entity.User;
 import com.Spring.SpringBoot.services.EmailSenderService;
 import freemarker.template.TemplateException;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,7 +26,6 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 @Controller
 //@RequestMapping("/user")
@@ -185,21 +180,4 @@ public class UserController {
         return "redirect:/login?logout";
     }
 
-    @GetMapping(value="/dashboard")
-    public ModelAndView dashboard(ModelAndView model)
-    {
-        Pageable pageable=PageRequest.of(0,10);
-        Page<Products> page= productDao.findAll(pageable);
-        List<Products> productsList=page.getContent();
-        model.addObject("title","dashboard");
-
-        model.addObject("products",productsList);
-        return model;
-    }
-    @GetMapping (value="/productview")
-    public String viewProduct(ModelAndView model)
-    {
-        model.addObject("title", "Viewed Product");
-        return "viewProduct";
-    }
 }

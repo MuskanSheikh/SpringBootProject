@@ -30,15 +30,15 @@
             <tbody>
             <tr th:each="pro, iStat : ${products}">
                 <th scope="row" th:text="${iStat.index +1}">1</th>
-                <td th:text="${pro.category}"></td>
-                <td><img th:src="@{/${pro.photosImagePath}}"></td>
+                <td th:text="${pro.category.Cname}"></td>
+                <td><img th:src="@{${pro.photosImagePath}}" width="150px" height="150px"></td>
                 <td th:text="${pro.Pname}"></td>
                 <td th:text="${pro.Pbrand}"></td>
                 <td th:text="${pro.Pprice}"></td>
                 <td th:text="${pro.Pmadein}"></td>
                 <td th:text="${pro.Pdesc}"></td>
-                <td><a href="" th:href="@{/deleteCategory?(id=${pro.Pid})}" class="btn btn-danger">Delete</a></td>
-                <td><a href=""  th:href="@{/updateCategory?(id=${pro.Pid})}" class="btn btn-warning">Update</a></td>
+                <td><a href="" th:href="@{/deleteProduct?(id=${pro.Pid})}" class="btn btn-danger">Delete</a></td>
+                <td><a href=""  th:href="@{/updateProduct?(id=${pro.Pid})}" class="btn btn-warning">Update</a></td>
             </tr>
             </tbody>
         </table>
