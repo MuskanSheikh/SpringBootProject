@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository("ProductDao")
 public interface ProductDao extends PagingAndSortingRepository<Products,Long> {
+    /*List<Products> findAllByCategory(Category category,Long id);*/
 }

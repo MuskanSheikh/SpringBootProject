@@ -18,6 +18,9 @@ public class Products {
     @JoinColumn(name = "cat_id",referencedColumnName = "cat_id")
     private Category category;
 
+    @Transient
+    private long catid;
+
     @Column(name="pr_img")
     private String Pimg;
 

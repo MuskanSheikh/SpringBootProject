@@ -26,8 +26,7 @@ import java.util.Optional;
 @Controller
 public class AdminController {
     //public static String uploadDir= ClassPathResource("/static/productImages");
-
-   // public static String uploadDir=System.getProperty("user.dir")+"src/main/resources/static/productImages";
+   // public static String uploadDir=System.getProperty("user.dir")+"/src/main/resources/static/Pimages/";
 
     @Autowired
     private CategoryDao categoryDao;
@@ -131,29 +130,25 @@ public class AdminController {
         return "redirect:/products";
     }
 
-
-    /*@RequestMapping(value="/addProduct", method = POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public String addProductPost(@ModelAttribute("product") Products products,
-                                 @RequestParam("imagefile")MultipartFile file) throws IOException
+    @GetMapping("/deleteProduct")
+    public String deleteProduct(@RequestParam("id") long Pid)
     {
-        String imageUUID= file.getOriginalFilename();
-        if(!file.isEmpty())
-        {
-            byte[] data= Base64.encodeBase64(products.getPimg().getBytes());
-            String result = new String(data);
-            System.out.println(result);
-            imageUUID= file.getOriginalFilename();
-            Path imgPathAndName = Paths.get(uploadDir,imageUUID);
-            Files.write(imgPathAndName,data);
-        }else{
-            imageUUID = products.getPimgName();
-        }
-        products.setPimgName(imageUUID);
-        //products.setPimg(Stringdata);
-        //System.out.println(products);
-        productDao.save(products);
+        productDao.deleteById(Pid);
         return "redirect:/products";
-    }*/
+    }
 
+    @GetMapping("/updateProduct")
+    public String updateProduct(@RequestParam("id") long Pid, Model model)
+    {
+        Optional<Products> products= productDao.findById(Pid);
+        if(products.isPresent())
+        {
+            model.addAttribute("product", products.get());
+            return "AddProduct";
+        }
+        else{
+            return "404";
+        }
+    }
 }
 

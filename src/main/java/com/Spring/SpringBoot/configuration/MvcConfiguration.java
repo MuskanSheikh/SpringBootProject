@@ -1,6 +1,8 @@
 package com.Spring.SpringBoot.configuration;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -23,10 +25,11 @@ public class MvcConfiguration implements WebMvcConfigurer {
         registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:/"+ uploadPath + "/");
     }
 
-   /* @Bean
-    public MultipartResolver multipartResolver() {
-        final CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
+    @Bean
+    public CommonsMultipartResolver multipartResolver(){
+        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
+        commonsMultipartResolver.setMaxInMemorySize(-1);
         commonsMultipartResolver.setMaxUploadSize(-1);
-        return new StandardServletMultipartResolver();
-    }*/
+        return commonsMultipartResolver;
+    }
 }
