@@ -33,9 +33,9 @@
                                 <h5 class="mt-0 font-weight-bold mb-2" th:text="${prdt.Pname}"></h5>
                                 <p class="font-italic text-muted mb-0 small" th:text="${prdt.Pdesc}"></p>
                                 <div class="d-flex align-items-center justify-content-between mt-1">
-                                    <h6 class="font-weight-bold my-2" th:text="'$'+${prdt.Pprice}"></h6>
+                                    <h6 class="font-weight-bold my-2" th:text="'Rs: '+${prdt.Pprice}"></h6>
                                     <ul class="list-inline small">
-                                        <li class="list-inline-item m-0"><a th:href="@{/productview}" class="btn btn-outline-primary" style="color:#0d0d0c;">View Product</a></li>
+                                        <li class="list-inline-item m-0"><a th:href="@{/productview?(id=${prdt.Pid})}" class="btn btn-outline-primary" style="color:#0d0d0c;">View Product</a></li>
                                     </ul>
                                 </div>
                             </div><img th:src="@{${prdt.photosImagePath}}" width="150px" height="150px" class="ml-lg-5 order-1 order-lg-2">

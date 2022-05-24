@@ -52,6 +52,16 @@
                     </div>
                     <div class="value">
                         <div class="input-group">
+                                <label style="padding-right:5px;">Select Role</label>
+                                <Select class="input--style-6"  type="text" name="category" th:field="*{roles}"
+                                        placeholder="Select Role">
+                                    <option value="ROLE_ADMIN">USER</option>
+                                    <option value="ROLE_ADMIN">ADMIN</option>
+                                </Select>
+                        </div>
+                    </div>
+                    <div class="value">
+                        <div class="input-group">
                            <label class="check" style="font-size:18px; color:#8a867d;">I accept the <a href="#">Terms of Use</a> & <a href="#">privacy Policy</a>.</span>
                                 <input type="checkbox" name="checkbox">
                                <span class="checkmark"></span>

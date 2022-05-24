@@ -48,18 +48,21 @@ public class User {
     @Column(name="reset_password_token", updatable = true, nullable = true)
     private String resetPasswordToken;
 
+    @Column(name="role",insertable = true)
+    private String roles;
 
     public User() {
-        //resetPasswordToken= UUID.randomUUID().toString();
+
     }
 
-    public User(String firstname, String lastname, String email, String password,boolean isEnabled,String confirmPassword, String newPassword) {
+    public User(String firstname, String lastname, String email, String password,boolean isEnabled,String confirmPassword, String roles) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
         this.isEnabled=isEnabled;
         this.confirmPassword=confirmPassword;
+        this.roles=roles;
     }
     public String getFirstname() {
         return firstname;
@@ -125,6 +128,14 @@ public class User {
 
     public void setResetPasswordToken(String resetPasswordToken) {
         this.resetPasswordToken = resetPasswordToken;
+    }
+
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 
     @Override

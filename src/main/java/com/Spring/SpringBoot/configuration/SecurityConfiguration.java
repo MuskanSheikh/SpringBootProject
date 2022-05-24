@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,8 +25,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/dashboard").authenticated()
-                .anyRequest().permitAll()
+                .antMatchers("/dashboard","/shop","/register","/productview").permitAll()
+                .antMatchers("/adminPanel","/categories","/addCategory","/deleteCategory","/updateCategory","/products","/addProduct","/deleteProduct","/updateProduct").hasRole("ADMIN")
+                .antMatchers("/viewcart").hasRole("USER")
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -37,8 +40,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().logoutSuccessUrl("/login");
          http.cors().and().csrf().disable().httpBasic();
-                //.antMatchers("/register").permitAll()
-                //.antMatchers("/confirm").permitAll();
 
     }
 
@@ -88,5 +89,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     }
 
-
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+       web.ignoring().antMatchers("/resources/**", "/static/**","/css/**","/js/**","/productImages/**");
+    }
 }
