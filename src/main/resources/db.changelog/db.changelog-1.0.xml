@@ -32,4 +32,15 @@
             <where>id=1</where>
         </delete>
     </changeSet>
+    <changeSet id="4" author="liquibase">
+        <delete tableName="products">
+            <where>pr_id=13</where>
+        </delete>
+    </changeSet>
+    <changeSet id="5" author="liquibase">
+        <dropTable tableName="demoPractice"></dropTable>
+    </changeSet>
+    <changeSet id="6" author="liquibase">
+        <dropTable tableName="testp"></dropTable>
+    </changeSet>
 </databaseChangeLog>
