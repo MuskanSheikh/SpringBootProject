@@ -158,6 +158,7 @@ public class UserController {
     @GetMapping (value="/login")
     public String login(ModelAndView model)
     {
+        //GlobalData.cart.clear();
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         if(authentication==null || authentication instanceof AnonymousAuthenticationToken)
         {
