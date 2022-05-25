@@ -1,29 +1,41 @@
 package com.Spring.SpringBoot.Controller;
 
-import com.Spring.SpringBoot.entity.User;
-import com.Spring.SpringBoot.entity.cartItems;
+import com.Spring.SpringBoot.Dao.ProductDao;
+import com.Spring.SpringBoot.Global.GlobalData;
+import com.Spring.SpringBoot.entity.Products;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ShoppingCartController {
 
     @Autowired
-    private com.Spring.SpringBoot.Dao.cartItemsDao cartItemsDao;
+    private ProductDao productDao;
 
-    private User user;
+   @GetMapping("/addtocart")
+   public String addGet(@RequestParam("id")long cid, Model model)
+   {
+       GlobalData.cart.add(productDao.findById(cid).get());
+       return "redirect:/shop";
+   }
+
     @GetMapping("/cart")
-    public  String showShoppingCart (Model model, @AuthenticationPrincipal Authentication authentication)
+    public  String showCart (Model model)
     {
-        List<cartItems> cartItems=cartItemsDao.findByUser(user);
-        model.addAttribute("cartItems",cartItems);
+        model.addAttribute("cartCount",GlobalData.cart.size());
+        model.addAttribute("total",GlobalData.cart.stream().mapToDouble(Products::getPprice).sum());
+        model.addAttribute("cart",GlobalData.cart);
         model.addAttribute("title","shopping cart");
         return "Shopping_cart";
+    }
+
+    @GetMapping("/removeItem")
+    public String removeItem(@RequestParam("i") int index)
+    {
+        GlobalData.cart.remove(index);
+        return "redirect:/cart";
     }
 }
