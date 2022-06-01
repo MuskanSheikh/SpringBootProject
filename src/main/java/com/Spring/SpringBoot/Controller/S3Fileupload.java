@@ -1,6 +1,5 @@
 package com.Spring.SpringBoot.Controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,13 +20,14 @@ public class S3Fileupload {
         System.out.println("filename:" + fileName);
 
 
-        try {
-            S3Utils.uploadFile(fileName,file.getInputStream());
+       /* try {
+           // S3Utils.uploadFile(fileName,file.getInputStream());
             ResponseEntity.status(HttpStatus.OK);
         } catch (IOException e) {
            e.printStackTrace();
         }
-        return new ResponseEntity("Can't upload file" ,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity("Can't upload file" ,HttpStatus.BAD_REQUEST);*/
+        return null;
     }
 
     private File convertMultiPartFileToFile(final MultipartFile multipartFile) {
